@@ -1,7 +1,11 @@
 "use client";
 
+/**
+ * Contact form: POSTs to /api/inquiry, then redirects to /[lang]/thank-you on success.
+ * Env vars (Resend, optional WhatsApp) must be set in Netlify – see INQUIRY_SETUP.md.
+ */
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/sections/footer/Footer";
@@ -12,15 +16,69 @@ import { useLang, useTranslations } from "@/contexts/LangContext";
 const INPUT_STYLE =
   "w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-zyra-primary focus:outline-none focus:ring-1 focus:ring-zyra-primary";
 
+function validateForm(form: FormData): string | null {
+  const name = (form.get("name") as string)?.trim() ?? "";
+  const phone = (form.get("phone") as string)?.trim() ?? "";
+  const email = (form.get("email") as string)?.trim() ?? "";
+  const message = (form.get("message") as string)?.trim() ?? "";
+  if (name.length < 2) return "Full name is required.";
+  if (phone.length < 5) return "Phone / WhatsApp is required.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Valid email is required.";
+  if (message.length < 10) return "Message is required (at least 10 characters).";
+  return null;
+}
+
 export default function ContactPage() {
   const router = useRouter();
   const { lang } = useLang();
   const t = useTranslations();
   const c = t.contact;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    router.push(`/${lang}/thank-you`);
+    setError(null);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const validationError = validateForm(formData);
+    if (validationError) {
+      setError(c.formValidationError);
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const body = {
+        name: (formData.get("name") as string)?.trim() ?? "",
+        company: (formData.get("company") as string)?.trim() || undefined,
+        phone: (formData.get("phone") as string)?.trim() ?? "",
+        email: (formData.get("email") as string)?.trim() ?? "",
+        projectType: (formData.get("projectType") as string)?.trim() || undefined,
+        location: (formData.get("location") as string)?.trim() || undefined,
+        message: (formData.get("message") as string)?.trim() ?? "",
+        lang,
+        sourcePage: `/${lang}/contact`,
+      };
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(typeof data.error === "string" ? data.error : c.formError);
+        return;
+      }
+      if (!data.success) {
+        setError(typeof data.error === "string" ? data.error : c.formError);
+        return;
+      }
+      router.push(`/${lang}/thank-you`);
+    } catch {
+      setError(c.formError);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -99,6 +157,7 @@ export default function ContactPage() {
                         required
                         placeholder={c.placeholders.fullName}
                         className={INPUT_STYLE}
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
@@ -111,6 +170,7 @@ export default function ContactPage() {
                         type="text"
                         placeholder={c.placeholders.company}
                         className={INPUT_STYLE}
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -126,6 +186,7 @@ export default function ContactPage() {
                         required
                         placeholder={c.placeholders.phone}
                         className={INPUT_STYLE}
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
@@ -139,6 +200,7 @@ export default function ContactPage() {
                         required
                         placeholder={c.placeholders.email}
                         className={INPUT_STYLE}
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -151,6 +213,7 @@ export default function ContactPage() {
                         id="projectType"
                         name="projectType"
                         className={INPUT_STYLE}
+                        disabled={isSubmitting}
                       >
                         {c.projectTypes.map((opt) => (
                           <option key={opt.value || "empty"} value={opt.value}>
@@ -169,6 +232,7 @@ export default function ContactPage() {
                         type="text"
                         placeholder={c.placeholders.location}
                         className={INPUT_STYLE}
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -183,13 +247,20 @@ export default function ContactPage() {
                       required
                       placeholder={c.placeholders.message}
                       className={`${INPUT_STYLE} min-h-[120px] resize-y`}
+                      disabled={isSubmitting}
                     />
                   </div>
+                  {error && (
+                    <p className="text-sm text-red-600" role="alert">
+                      {error}
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className="rounded-xl bg-zyra-primary px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-zyra-primary/25 transition-all duration-300 hover:scale-[1.02] hover:bg-zyra-deep hover:shadow-lg hover:shadow-zyra-primary/30"
+                    disabled={isSubmitting}
+                    className="rounded-xl bg-zyra-primary px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-zyra-primary/25 transition-all duration-300 hover:scale-[1.02] hover:bg-zyra-deep hover:shadow-lg hover:shadow-zyra-primary/30 disabled:pointer-events-none disabled:opacity-70"
                   >
-                    {c.sendInquiry}
+                    {isSubmitting ? c.sending : c.sendInquiry}
                   </button>
                 </form>
               </div>

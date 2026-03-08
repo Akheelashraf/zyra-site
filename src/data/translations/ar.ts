@@ -258,6 +258,9 @@ export const ar = {
     location: "الموقع",
     message: "الرسالة",
     sendInquiry: "إرسال الاستفسار",
+    formError: "حدث خطأ. يرجى المحاولة مرة أخرى أو الاتصال بنا مباشرة.",
+    formValidationError: "يرجى تعبئة جميع الحقول المطلوبة بشكل صحيح.",
+    sending: "جاري الإرسال…",
     placeholders: {
       fullName: "الاسم الكامل",
       company: "اسم الشركة أو العمل",

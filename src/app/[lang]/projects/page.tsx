@@ -76,8 +76,15 @@ export default function ProjectsPage() {
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ duration: 0.65, delay: index * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
                   >
-                    <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-zyra-neutral/50 to-zyra-neutral/30 transition-transform duration-500 group-hover:scale-[1.03]">
-                      <div className="h-full w-full bg-gradient-to-br from-zyra-neutral/60 to-zyra-neutral/40" />
+                    <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-zyra-neutral/60 via-zyra-neutral/45 to-zyra-neutral/35 transition-transform duration-500 group-hover:scale-[1.03] ring-1 ring-black/5">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
+                          backgroundSize: "20px 20px",
+                        }}
+                        aria-hidden
+                      />
                     </div>
                     <div className="flex flex-1 flex-col p-8">
                       <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zyra-primary">
@@ -94,7 +101,7 @@ export default function ProjectsPage() {
                         className="inline-flex items-center text-sm font-semibold text-zyra-primary transition-colors duration-200 hover:text-zyra-deep"
                       >
                         {p.discussProject}
-                        <span className="ml-1.5 transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                        <span className="ms-1.5 transition-transform duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">→</span>
                       </Link>
                     </div>
                   </motion.article>

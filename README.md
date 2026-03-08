@@ -78,3 +78,13 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser.
 - See **src/app/ICON_AND_SOCIAL_IMAGES.md** for where to add `icon.png`, `apple-icon.png`, and `opengraph-image.png` so the site looks correct in browser tabs and when shared on social media.
 
 The project includes a `vercel.json` that aligns with this workflow.
+
+---
+
+## Contact form (inquiry system)
+
+The contact form submits to `POST /api/inquiry`, which sends the inquiry by email (Resend) and optionally notifies you via WhatsApp (Meta WhatsApp Cloud API).
+
+- **Environment variables**: See **INQUIRY_SETUP.md** for required env vars (Resend, optional WhatsApp) and where to set them (e.g. Netlify).
+- **Resend**: Create an API key and, for production, verify your domain. Default recipient: `connect@zyrabuilds.com`.
+- **WhatsApp**: Optional. Configure in Meta for Developers and set the token and phone number ID in your environment.

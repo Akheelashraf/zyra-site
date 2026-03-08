@@ -53,7 +53,16 @@ function ProjectBlock({
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-zyra-neutral/60 to-zyra-neutral/40" />
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-zyra-neutral/70 via-zyra-neutral/50 to-zyra-neutral/40 ring-1 ring-inset ring-black/5"
+              style={{
+                backgroundImage: "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+              aria-hidden
+            >
+              <span className="text-sm font-medium tracking-widest text-gray-400/80 uppercase">Project</span>
+            </div>
           )}
         </div>
       </div>
@@ -76,7 +85,7 @@ function ProjectBlock({
             {viewProjectLabel}
             <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-zyra-primary transition-transform duration-300 group-hover/link:scale-x-100" aria-hidden />
           </span>
-          <span className="ml-1.5 transition-transform duration-300 group-hover/link:translate-x-0.5">→</span>
+          <span className="ms-1.5 transition-transform duration-300 group-hover/link:translate-x-0.5 rtl:group-hover/link:-translate-x-0.5">→</span>
         </Link>
       </div>
     </motion.article>

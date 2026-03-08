@@ -256,6 +256,9 @@ export const en = {
     location: "Location",
     message: "Message",
     sendInquiry: "Send Inquiry",
+    formError: "Something went wrong. Please try again or contact us directly.",
+    formValidationError: "Please fill in all required fields correctly.",
+    sending: "Sending…",
     placeholders: {
       fullName: "Your full name",
       company: "Company or business name",
