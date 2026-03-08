@@ -1,0 +1,83 @@
+@import "./variables.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles – Zyra Builds */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply antialiased text-gray-900 bg-white;
+  }
+}
+
+/* Section rhythm and shared polish */
+@layer components {
+  .container-zyra {
+    @apply mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8;
+  }
+  .container-zyra-sm {
+    @apply mx-auto w-full max-w-container-sm px-4 sm:px-6 lg:px-8;
+  }
+  .section-padding {
+    @apply py-24 md:py-32;
+  }
+  .section-intro {
+    @apply mx-auto max-w-2xl text-center;
+  }
+  .section-heading {
+    @apply text-3xl font-bold tracking-tight text-gray-900 md:text-4xl md:leading-[1.2];
+  }
+  .section-subtext {
+    @apply text-lg leading-relaxed text-gray-600;
+  }
+  /* Blue sections: headings and body must be white / white-90 only */
+  .section-heading-on-blue {
+    @apply text-3xl font-bold tracking-tight text-white md:text-4xl md:leading-[1.2];
+  }
+  .section-subtext-on-blue {
+    @apply text-lg leading-relaxed text-white/90;
+  }
+}
+
+/* Hero: breathing gradient (Zyra brand colors) */
+@keyframes hero-gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Hero visual stage: CSS-only float (no JS scroll/transform) */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-3px, 6px);
+  }
+  66% {
+    transform: translate(4px, -4px);
+  }
+}
+
+/* Utility: fade-in for FloatingWhatsApp (no Framer) */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out;
+}
+

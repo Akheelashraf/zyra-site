@@ -1,0 +1,20 @@
+/**
+ * Zyra Builds – Design tokens / CSS variables
+ * Use these in Tailwind or raw CSS for consistent branding.
+ */
+
+:root {
+  /* Zyra brand colors */
+  --zyra-primary: #3E4FD3;
+  --zyra-deep: #2F3FB3;
+  --zyra-neutral: #E6E6E6;
+  --zyra-white: #FFFFFF;
+  --zyra-accent-glow: #6F7DFF;
+
+  /* Optional semantic names */
+  --color-brand: var(--zyra-primary);
+  --color-brand-dark: var(--zyra-deep);
+  --color-background: var(--zyra-white);
+  --color-surface: var(--zyra-neutral);
+  --color-accent: var(--zyra-accent-glow);
+}
